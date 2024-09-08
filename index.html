@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maximize Number</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Maximize Number by Digit Swapping</h1>
+        <form id="maximize-form">
+            <label for="first_num">First Number:</label>
+            <input type="text" id="first_num" name="first_num" required>
+            
+            <label for="second_num">Second Number:</label>
+            <input type="text" id="second_num" name="second_num" required>
+            
+            <button type="submit">Maximize</button>
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('maximize-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const first_num = document.getElementById('first_num').value;
+            const second_num = document.getElementById('second_num').value;
+
+            fetch('/maximize_number', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    first_num: first_num,
+                    second_num: second_num
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerHTML = 
+                    `<h2>Maximized Number: ${data.maximized_number}</h2>`;
+            })
+            .catch(error => {
+                document.getElementById('result').innerHTML = 
+                    `<h2>Error: ${error}</h2>`;
+            });
+        });
+    </script>
+</body>
+</html>
